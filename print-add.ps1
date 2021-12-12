@@ -1,15 +1,15 @@
-$yazici_list = Import-Csv C:\Users\Emin\Desktop\yazicilistesi.csv #Yazıcı listesinin bulunduğu konum
+$yazici_list = Import-Csv C:\Users\Emin\Desktop\yazicilistesi.csv #Location of printer list
     foreach ($yazici in $yazici_list) {
             $marka=$($yazici.'MARKA')
             $model=$($yazici.'MODEL')
             $yaziciadi=$($yazici.'YAZICI ADI')
-            $ipadresi=$($yazici.'IP ADRESİ')
-            #Ilk once ip adresiminizi baglanti noktasi olarak ekliyoruz. Burada baglanti noktasini eklerken baglanti ismine ip adresinin aynisi ekledik
-            #Ornek 192.168.100.1 ip adresinin adini 192.168.100.1 yaptik isterseniz farklida yapabilirsiniz daha onceden ayni baglanti noktasi varsa hata verebilir
+            $ipadresi=$($yazici.'IP ADRESI')
+            #First we add our ip address as port. Here we add the same ip address to the connection name while adding the port
+            #Example 192.168.100.1 We changed the name of the ip address to 192.168.100.1, you can do it differently if you want, it may give an error if there is the same port before
             Add-PrinterPort -Name "$ipadresi" -PrinterHostAddress "$ipadresi"
-            #Bu kisimda yazicilarin modellere gore ayrip farklı surucu sececegimiz alan
+            #In this section, we select different drivers according to the models of the printers.
             if ($model -le 'WF-M5799') {
-                #Bu kisimda Driver Name Kismina daha once yuklediniz driverin ismini yazmaniz gerekmektedir.
+                #In this section, you need to write the name of the driver you have previously installed in the Driver Name Section.
                 Add-Printer -Name $yaziciadi -DriverName "EPSON WF-M5799 Series" -PortName $ipadresi -Shared -ShareName $yaziciadi –Published
             }
             else {
